@@ -4,9 +4,10 @@ from models.recipe import Recipe
 
 class IngredientAPI(Resource):
 
-    def get(self):
+    def get(self, category=None):
 
         all_ingredients = Recipe._get_collection().aggregate([
+            {"$match": {"category": category}},
             {"$unwind": "$ingredients"},
             {"$group": {
                 "_id": "$ingredients.name",
@@ -15,9 +16,7 @@ class IngredientAPI(Resource):
             {"$sort": {"count": -1}}
         ])
 
-        return {"success": [
-            {"name": ing['_id'], "count": ing['count']} for ing in all_ingredients
-        ]}, 200
+        return {"success": [ing['_id'] for ing in all_ingredients]}, 200
 
     def post(self):
         pass
