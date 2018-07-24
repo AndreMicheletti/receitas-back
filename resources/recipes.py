@@ -23,6 +23,7 @@ class RecipeAPI(Resource):
         return {"success": [rec.to_dict() for rec in all_recipes]}, 200
 
     def post(self, category=None):
+        from controllers.recipes import calculate_and_filter_recipe_scores
 
         args = request.get_json()
         ingredients = args.get('ingredients', None)
@@ -33,19 +34,5 @@ class RecipeAPI(Resource):
 
         recipes = list(Recipe.objects(category=category, ingredients__name__in=ingredients))
 
-        result = []
-        for recipe in recipes:
-            ingredient_names = [ing.name for ing in recipe.ingredients]
-            count = 0
-            for _ in [ing for ing in ingredients if ing in ingredient_names]:
-                count += 1
-            rating = len(ingredient_names) - count
-            if count == len(ingredients):
-                rating -= 100
-            result.append({
-                **recipe.to_dict(),
-                'rating': rating
-            })
-        result = sorted(result, key=lambda x: x['rating'])
-
+        result = calculate_and_filter_recipe_scores(ingredients, recipes)
         return {"success": result[:limit]}, 200

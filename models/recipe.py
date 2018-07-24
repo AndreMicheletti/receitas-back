@@ -44,7 +44,7 @@ def is_number(x):
 class EmbeddedIngredient(EmbeddedDocument):
 
     name = StringField()
-    quantity = IntField()
+    quantity = StringField()
     measure = StringField()
 
 
