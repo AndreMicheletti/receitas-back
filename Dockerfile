@@ -6,9 +6,7 @@ RUN pip install --upgrade -r requirements.txt
 COPY . /app
 WORKDIR /app
 
-ENV ENV="PROD"
-ENV DEBUG=false
-ENV FLASK_DEBUG=false
+ENV ENV_MODE="PROD"
 
 EXPOSE 7465
 EXPOSE 5000
