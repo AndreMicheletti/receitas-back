@@ -67,7 +67,7 @@ class Recipe(Document):
             'category', 'photo', 'ingredients',
             ('category', 'ingredients')
         ],
-        'db-alias': 'recipes-db'
+        'db-alias': 'default'
     }
 
     def __repr__(self):

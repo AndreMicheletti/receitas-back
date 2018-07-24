@@ -24,10 +24,10 @@ app.register_blueprint(app_blueprint)
 if __name__ == '__main__':
     from database import DATABASE_NAME, MONGO_CONN_STRING_MASTER
 
-    is_prod = os.getenv("ENV_MODE", "local") == "PROD"
-    if is_prod:
-        connect(db=DATABASE_NAME, host=MONGO_CONN_STRING_MASTER)
-    else:
-        connect(db=DATABASE_NAME)
+    is_testing = os.getenv("TESTING", None) is not None
+    if is_testing:
+        connect(db=DATABASE_NAME, alias='default')
 
-    app.run(host="0.0.0.0", port='7465', debug=not is_prod)
+    connect(db=DATABASE_NAME, host=MONGO_CONN_STRING_MASTER, alias='default')
+
+    app.run(host="0.0.0.0", port='7465', debug=is_testing)
