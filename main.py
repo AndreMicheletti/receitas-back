@@ -22,7 +22,11 @@ api_v1.add_resource(IngredientAPI, '/ingredient/<category>')
 app.register_blueprint(app_blueprint)
 
 if __name__ == '__main__':
-    from database import DATABASE_NAME
+    from database import DATABASE_NAME, MONGO_CONN_STRING_MASTER
 
-    connect(db=DATABASE_NAME)
-    app.run(host='0.0.0.0', port='5555')
+    if os.getenv("ENV", "local") == "PROD":
+        connect(db=DATABASE_NAME, host=MONGO_CONN_STRING_MASTER)
+    else:
+        connect(db=DATABASE_NAME)
+
+    app.run(host="0.0.0.0", port='7465')
