@@ -19,7 +19,10 @@ def calculate_and_filter_recipe_scores(
             this_recipe_score += 50
 
         # score :: has few ingredients
-        this_recipe_score -= len(this_recipe_ingredients)
+        this_recipe_score -= (2 * len(this_recipe_ingredients))
+
+        # score :: likes
+        this_recipe_score += recipe.likes if recipe.likes else 0
 
         result.append({
             **recipe.to_dict(),

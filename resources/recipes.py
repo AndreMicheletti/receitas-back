@@ -7,7 +7,7 @@ from models.recipe import Recipe
 
 class RecipeAPI(Resource):
 
-    def get(self, category=None):
+    def get(self, category=None, recipe_id=None):
 
         parser = reqparse.RequestParser()
         parser.add_argument('limit', type=int, default=20)
@@ -22,7 +22,7 @@ class RecipeAPI(Resource):
 
         return {"success": [rec.to_dict() for rec in all_recipes]}, 200
 
-    def post(self, category=None):
+    def post(self, category=None, recipe_id=None):
         from controllers.recipes import calculate_and_filter_recipe_scores
 
         args = request.get_json()
@@ -36,3 +36,14 @@ class RecipeAPI(Resource):
 
         result = calculate_and_filter_recipe_scores(ingredients, recipes)
         return {"success": result[:limit]}, 200
+
+    def put(self, recipe_id=None, **kwargs):
+
+        if not recipe_id:
+            return {"error": "must provide category and recipe id within the url"}, 500
+
+        r = Recipe.objects(id=recipe_id).update_one(inc__likes=1)
+
+        if r:
+            return {"success": Recipe.objects(id=recipe_id).first().to_dict()}
+        return {"error": "unknown"}, 500

@@ -62,6 +62,8 @@ class Recipe(Document):
 
     portion_yield = IntField()
 
+    likes = IntField(default=0)
+
     meta = {
         'indexes': [
             'category', 'photo', 'ingredients',
@@ -73,8 +75,13 @@ class Recipe(Document):
     def __repr__(self):
         return f'<Recipe {str(self.id)} - {self.name}>'
 
-    def to_dict(self):
-        return json.loads(self.to_json())
+    def to_dict(self) -> dict:
+        result = json.loads(self.to_json())
+        result.pop('_id')
+        return {
+            'id': str(self.id),
+            **result
+        }
 
     def parse_and_save_ingredient_strings(self, ingredients_list):
         self.ingredients = [Recipe.parse_ingredient(ing) for ing in ingredients_list]

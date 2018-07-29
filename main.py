@@ -21,7 +21,12 @@ db.init_app(app)
 # register APIs
 api_v1 = Api(app_blueprint, prefix='/v1')
 
-api_v1.add_resource(RecipeAPI, '/recipe', '/recipe/<category>')
+api_v1.add_resource(
+    RecipeAPI,
+    '/recipe',
+    '/recipe/<category>',
+    '/recipe/like/<recipe_id>'
+)
 api_v1.add_resource(IngredientAPI, '/ingredient/<category>')
 
 # register blueprints
