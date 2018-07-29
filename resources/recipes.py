@@ -8,6 +8,7 @@ from models.recipe import Recipe
 class RecipeAPI(Resource):
 
     def get(self, category=None, recipe_id=None):
+        from controllers.recipes import calculate_and_filter_recipe_scores
 
         parser = reqparse.RequestParser()
         parser.add_argument('limit', type=int, default=20)
@@ -19,6 +20,8 @@ class RecipeAPI(Resource):
 
         skip = (page * limit)
         all_recipes = Recipe.objects().skip(skip).limit(limit)
+
+        result = calculate_and_filter_recipe_scores([], list(all_recipes))
 
         return {"success": [rec.to_dict() for rec in all_recipes]}, 200
 

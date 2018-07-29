@@ -16,7 +16,7 @@ def calculate_and_filter_recipe_scores(
 
         # score :: has all ingredients
         if all([ing in this_recipe_ingredients for ing in user_ingredients]):
-            this_recipe_score += 50
+            this_recipe_score += 250
 
         # score :: has few ingredients
         this_recipe_score -= (2 * len(this_recipe_ingredients))
