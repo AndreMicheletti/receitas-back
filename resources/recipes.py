@@ -1,6 +1,6 @@
-from bson import is_valid as is_valid_objid
 from flask import request
 from flask_restful import Resource, reqparse
+from unidecode import unidecode
 
 from models.recipe import Recipe
 
@@ -23,7 +23,7 @@ class RecipeAPI(Resource):
 
         result = calculate_and_filter_recipe_scores([], list(all_recipes))
 
-        return {"success": [rec.to_dict() for rec in all_recipes]}, 200
+        return {"success": result}, 200
 
     def post(self, category=None, recipe_id=None):
         from controllers.recipes import calculate_and_filter_recipe_scores
@@ -34,6 +34,8 @@ class RecipeAPI(Resource):
 
         if not ingredients:
             return {"error": "you must provide 'ingredients' argument"}, 500
+
+        ingredients = [unidecode(i) for i in ingredients]
 
         recipes = list(Recipe.objects(category=category, ingredients__name__in=ingredients))
 

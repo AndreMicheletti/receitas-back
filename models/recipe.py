@@ -57,6 +57,7 @@ class Recipe(Document):
     photo = StringField(default="")
 
     ingredients = ListField(EmbeddedDocumentField(EmbeddedIngredient))
+    ingredients_pretty = ListField(StringField())
 
     instructions = ListField(StringField())
 

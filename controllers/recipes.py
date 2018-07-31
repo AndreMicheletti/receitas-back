@@ -1,6 +1,8 @@
 from typing import List
 from models.recipe import Recipe
 
+from unidecode import unidecode
+
 
 def calculate_and_filter_recipe_scores(
         user_ingredients: List[str],
@@ -12,7 +14,7 @@ def calculate_and_filter_recipe_scores(
     for recipe in fetched_recipes:
 
         this_recipe_score = 0
-        this_recipe_ingredients = [ing.name for ing in recipe.ingredients]
+        this_recipe_ingredients = [unidecode(ing.name) for ing in recipe.ingredients]
 
         # score :: has all ingredients
         if all([ing in this_recipe_ingredients for ing in user_ingredients]):
