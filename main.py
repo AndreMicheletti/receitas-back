@@ -11,16 +11,24 @@ from database import db, FLASK_MONGODB_SETTINGS
 app = Flask(__name__)
 app.config["MONGODB_SETTINGS"] = FLASK_MONGODB_SETTINGS
 
-app_blueprint = Blueprint('api', __name__, url_prefix='/api')
-
-# CONNECT WITH DATABASE
+# connect with database
 
 register_connection('default', **FLASK_MONGODB_SETTINGS)
 db.init_app(app)
 
-# register APIs
-api_v1 = Api(app_blueprint, prefix='/v1')
+# register routes
 
+@app.route('/')
+def index():
+    return 'Hello World', 200
+
+# create blueprints
+
+app_blueprint = Blueprint('api', __name__, url_prefix='/api')
+
+# register resources
+
+api_v1 = Api(app_blueprint, prefix='/v1')
 api_v1.add_resource(
     RecipeAPI,
     '/recipe',
